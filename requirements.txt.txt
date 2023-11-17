@@ -1,0 +1,8 @@
+streamlit
+joblib
+gensim
+sentence-transformers
+torch
+streamlit-text-rating
+pyspellchecker
+requests
