@@ -228,8 +228,11 @@ def find_synonyms(_model, input_word):
 
 # Function to find reverse definition using Sentence Transformers
 @st.cache_data(ttl= None)
-def find_reverse_definition(_list_data, input_text):
+def return_embedder():
     embedder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    reutrn embedder
+def find_reverse_definition(_list_data, input_text):
+    embedder = return_embedder()
     emb = embedder.encode(input_text)
     similarities = {word['word']: cosine_similarity(torch.tensor(emb), word["emb"], dim=0) for word in _list_data}
     best_match_word = max(similarities, key=similarities.get)
