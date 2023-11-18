@@ -226,9 +226,9 @@ def find_synonyms(_model, input_word):
     except KeyError:
         return []
 
+embedder = SentenceTransformer('all-MiniLM-L12-v2')
 # Function to find reverse definition using Sentence Transformers
 def find_reverse_definition(_list_data, input_text):
-    embedder = SentenceTransformer('sentence-transformers/all-MiniLM-L12-v2')
     emb = embedder.encode(input_text)
     similarities = {word['word']: cosine_similarity(torch.tensor(emb), word["emb"], dim=0) for word in _list_data}
     best_match_word = max(similarities, key=similarities.get)
