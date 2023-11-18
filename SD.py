@@ -227,7 +227,7 @@ def find_synonyms(_model, input_word):
         return []
 
 # Function to find reverse definition using Sentence Transformers
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl= None)
 def find_reverse_definition(_list_data, input_text):
     embedder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
     emb = embedder.encode(input_text)
