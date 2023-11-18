@@ -82,9 +82,9 @@ def get_base64_of_bin_file(bin_file):
     return f"data:image/png;base64,{encoded_string}"
 
 # Load your images
-background_image_base64 = get_base64_of_bin_file("web_design/wallpaper.png")
-logo_image_base64 = get_base64_of_bin_file("web_design/applogo.png")
-footer_image_base64 = get_base64_of_bin_file("web_design/footer.png")
+background_image_base64 = get_base64_of_bin_file("web_design\wallpaper.png")
+logo_image_base64 = get_base64_of_bin_file("web_design\applogo.png")
+footer_image_base64 = get_base64_of_bin_file("web_design\footer.png")
 
 # Define badges and their criteria
 badges = {
@@ -139,8 +139,8 @@ user_data = read_user_data()
 # Load ML model and vectorizer for Aammi words
 @st.cache_data(ttl=3600)
 def load_aammi_model():
-    model = joblib.load('ML/diaModel.pkl')
-    vectorizer = joblib.load('ML/tfidf_vectorizer.pkl')
+    model = joblib.load('ML\diaModel.pkl')
+    vectorizer = joblib.load('ML\tfidf_vectorizer.pkl')
     return model, vectorizer
 
 model_aammi, vectorizer_aammi = load_aammi_model()
@@ -148,8 +148,8 @@ model_aammi, vectorizer_aammi = load_aammi_model()
 # Load Word2Vec models for synonyms
 @st.cache_resource(ttl=3600)
 def load_gensim_models():
-    gensim_model1 = gensim.models.Word2Vec.load('full_uni_cbow_100_twitter/full_uni_cbow_100_twitter.mdl')
-    gensim_model2 = gensim.models.Word2Vec.load('full_uni_cbow_100_wiki/full_uni_cbow_100_wiki.mdl')
+    gensim_model1 = gensim.models.Word2Vec.load('full_uni_cbow_100_twitter\full_uni_cbow_100_twitter.mdl')
+    gensim_model2 = gensim.models.Word2Vec.load('full_uni_cbow_100_wiki\full_uni_cbow_100_wiki.mdl')
     return gensim_model1, gensim_model2
 
 gensim_model1, gensim_model2 = load_gensim_models()
