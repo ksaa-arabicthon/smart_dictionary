@@ -79,7 +79,7 @@ def search_api(query):
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as file:
         encoded_string = base64.b64encode(file.read()).decode()
-    return f"data:image/png;base64,{encoded_string}"
+    return f"data:image\png;base64,{encoded_string}"
 
 # Load your images
 background_image_base64 = get_base64_of_bin_file("web_design\wallpaper.png")
