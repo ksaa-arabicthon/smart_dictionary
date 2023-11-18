@@ -228,7 +228,6 @@ def find_synonyms(_model, input_word):
 
 # Function to find reverse definition using Sentence Transformers
 embedder = SentenceTransformer('distiluse-base-multilingual-cased')
-@st.cache_data(ttl=3600)
 def find_reverse_definition(_list_data, input_text):
     emb = embedder.encode(input_text)
     similarities = {word['word']: cosine_similarity(torch.tensor(emb), word["emb"], dim=0) for word in _list_data}
