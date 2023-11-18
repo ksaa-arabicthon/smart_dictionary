@@ -17,7 +17,6 @@ import requests
 if 'response_generated' not in st.session_state:
     st.session_state.response_generated = False
 
-embedder = SentenceTransformer('distiluse-base-multilingual-cased')
 # Function to load Arabic word list from CSV
 def remove_diacritics(word):
     diacritics = ['\u064B', '\u064C', '\u064D', '\u064E', '\u064F', '\u0650', '\u0651', '\u0652', '\u0653', '\u0654', '\u0655']
@@ -228,6 +227,7 @@ def find_synonyms(_model, input_word):
         return []
 
 # Function to find reverse definition using Sentence Transformers
+embedder = SentenceTransformer('distiluse-base-multilingual-cased')
 @st.cache_data(ttl=3600)
 def find_reverse_definition(_list_data, input_text):
     emb = embedder.encode(input_text)
