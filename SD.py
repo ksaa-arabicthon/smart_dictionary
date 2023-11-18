@@ -83,7 +83,7 @@ def get_base64_of_bin_file(bin_file):
 
 # Load your images
 background_image_base64 = get_base64_of_bin_file("web_design/wallpaper.png")
-logo_image_base64 = get_base64_of_bin_file("web_design/applogo.png")
+logo_image_base64 = get_base64_of_bin_file("web_design/APPlogo.png")
 footer_image_base64 = get_base64_of_bin_file("web_design/footer.png")
 
 # Define badges and their criteria
