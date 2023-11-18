@@ -13,6 +13,10 @@ import os
 import base64
 import requests
 
+# Initialize session_state
+if 'response_generated' not in st.session_state:
+    st.session_state.response_generated = False
+
 # Function to load Arabic word list from CSV
 def remove_diacritics(word):
     diacritics = ['\u064B', '\u064C', '\u064D', '\u064E', '\u064F', '\u0650', '\u0651', '\u0652', '\u0653', '\u0654', '\u0655']
@@ -52,7 +56,7 @@ def search_api(query):
     url = f"https://siwar.ksaa.gov.sa/api/alriyadh/search?query={query}"
     headers = {
         "accept": "application/json",
-        "apikey": api_key  # Using the API key from secrets
+        "apikey":  api_key  # Using the API key from secrets
     }
 
     response = requests.get(url, headers=headers)
@@ -84,9 +88,9 @@ footer_image_base64 = get_base64_of_bin_file("web_design/footer.png")
 
 # Define badges and their criteria
 badges = {
-    "Beginner": {"score_required": 50},
-    "Intermediate": {"score_required": 150},
-    "Expert": {"score_required": 300},
+    "لقد حصلت على شارة المتفاعل": {"score_required": 50},
+    "لقد حصلت على شارة المتفاعل المتقدم" : {"score_required": 150},
+    "لقد حصلت على شارة المتفاعل الخبير": {"score_required": 300},
 }
 
 # CSV file path for user data
@@ -100,11 +104,12 @@ def custom_st_write(text):
             font-weight: bold; /* Make text bold */
             color: #08707a; /* Custom text color */
             font-size: 20px; /* Custom font size */
-            margin: 20px; /* Add some space around the text */
+            margin: 20px auto; /* Center div horizontally */
             padding: 10px; /* Add padding */
             border-radius: 10px; /* Rounded corners */
             background-color: #f0f0f0; /* Light background for the text */
-            display: inline-block; /* Make it inline */
+            display: block; /* Use block to enable margin auto */
+            width: fit-content; /* Fit the width to the content */
         }}
     </style>
     <div class='custom-st-write'>{text}</div>
@@ -152,12 +157,6 @@ gensim_model1, gensim_model2 = load_gensim_models()
 # Replace 'file_path' with the actual path to your 'sample_data.pickle' file
 file_path = 'data\sample_data.pickle'
 
-# Initialize session state variables
-if 'response_generated' not in st.session_state:
-    st.session_state['response_generated'] = False
-if 'rating_message' not in st.session_state:
-    st.session_state['rating_message'] = ''
-
 @st.cache_resource(ttl=3600)
 def load_list_data(file_path):
     with open(file_path, 'rb') as handle:
@@ -204,8 +203,8 @@ def read_aammi_data():
     with open('data/Aammi_Faseh_Pairs.csv', newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            key = row['Faseh']
-            row_data = {col: val for col, val in row.items() if col != 'Faseh'}
+            key = row['Aammi']
+            row_data = {col: val for col, val in row.items() if col != 'Aammi'}
             data[key] = row_data
     return data
 
@@ -263,7 +262,7 @@ def rate_response(user, response, user_input, app_response):
             if user_data[user]["score"] >= criteria["score_required"] and badge not in user_data[user]["badges"]:
                 user_data[user]["badges"].append(badge)
         write_user_data(user_data)
-        return "تم إرسال رسالة إلى القاموس لإضافة هذا النص." if response == "liked" else "سيتم مراجعة الإجابة."
+        return "شكرا لك .. سيتم إرسال رسالة إلى المعجم لإضافة هذا المدخل" if response == "liked" else "سيتم مراجعة الإجابة."
     else:
         return "المستخدم غير موجود."
 
@@ -373,42 +372,50 @@ def handle_rating():
     </style>
     """
     st.markdown(button_style, unsafe_allow_html=True)
-
+        
     if st.button("ابحث:mag:"):
+
         if feature_option == "***المدلول المعجمي***":
             if input_text:
                 corrected_word = check_spelling(custom_spellchecker, input_text)
                 show_correction_button = corrected_word != input_text and corrected_word is not None
-
+                
                 if show_correction_button:
-                    correction_button_clicked = st.button(f"هل تقصد {corrected_word}?")
-
-                    if correction_button_clicked:
-                        final_word = corrected_word
-                    else:
-                        final_word = input_text
-                else:
-                    final_word = input_text
-
-                # Execute the search with the final word
-                if final_word:
+                    custom_st_write(f"هل تقصد {corrected_word}")
+                    final_word = corrected_word
                     definitions = search_api(final_word)
-
                     if definitions:
                         for definition in definitions:
-                            st.write(f"تعريف: {definition}")
+                            custom_st_write(f"تعريف: {definition}")
                     else:
-                        st.write("لم يتم العثور على تعريف لهذه الكلمة أو النص")
+                        custom_st_write("2لم يتم العثور على تعريف لهذه الكلمة أو النص")
+                else:
+                    final_word = input_text
+            else:
+                final_word = input_text
+
+            # Execute the search with the final word
+            if final_word:
+                definitions = search_api(final_word)
+
+                if definitions:
+                    for definition in definitions:
+                        custom_st_write(f"تعريف: {definition}")
+                else:
+                    custom_st_write("3لم يتم العثور على تعريف لهذه الكلمة أو النص")
+
         elif feature_option == "***النظير الكلمي***":
             synonyms = find_synonyms(gensim_model2, input_text)
             custom_st_write(f"مرادفات فصيحة للكلمة أو النص '{input_text}':")
             for synonym in synonyms:
                 custom_st_write(synonym)
+
         elif feature_option == "***النظير العامي***":
             synonyms = find_synonyms(gensim_model1, input_text)
             custom_st_write(f"مرادفات عامة للكلمة أو النص '{input_text}':")
             for synonym in synonyms:
                 custom_st_write(synonym)
+
         elif feature_option == "***الأصيل الكلمي***":
             # Load data for Mosstarbi words
             data = read_mosstarbi_data()
@@ -419,7 +426,7 @@ def handle_rating():
             else:
                 custom_st_write("لم يتم العثور على مطابقة")
 
-        elif feature_option == "***النظير العامي***":
+        elif feature_option == "***الدّارج الكلمي***":
             # Load data for Aammi words
             data = read_aammi_data()
             closest_matches = difflib.get_close_matches(input_text, data.keys())
@@ -431,20 +438,18 @@ def handle_rating():
                 predicted_faseh = predict_faseh(input_text)
                 custom_st_write(f"المصطلح الفصيح للكلمة أو النص '{input_text}' هو '{predicted_faseh}'.")
 
-        elif feature_option == "المدلول العكسي":
+        elif feature_option == "***المدلول العكسي***":
             best_match_word = find_reverse_definition(list_data, input_text)
             custom_st_write(f"أقرب كلمة بالتعريف العكس للنص المدخل: '{best_match_word}'")
-            
-        
+
         st.session_state['response_generated'] = True
         st.session_state['user_input'] = input_text
         st.session_state['app_response'] = app_response
 
     if st.session_state['response_generated']:
         # Display the rating component
-        st.markdown('<div class="markdown-label">يرجى تقييم الإجابة</div>', unsafe_allow_html=True)
-        response = st_text_rater(text="هل تعجبك هذه الإجابة؟")
-        
+        st.write('<div class="markdown-label">يرجى تقييم الإجابة</div>', unsafe_allow_html=True)
+        response = st_text_rater(text="هل تعجبك هذه الإجابة؟")        
         # Prompt for user registration to earn points
         st.markdown('<div class="markdown-label">للحصول على نقاط في برنامج إثراء المجمع يرجى التسجيل هنا</div>', unsafe_allow_html=True)
         # Custom label using markdown for each input
@@ -485,9 +490,9 @@ def handle_rating():
 
 def display_user_data(user):
     if user in user_data:
-        custom_st_write(f"**النقاط الحالية:** {user_data[user]['score']}")
+        custom_st_write(f"النقاط الحالية: {user_data[user]['score']}")
         if user_data[user]['badges']:
-            custom_st_write("**الشارات المكتسبة:**")
+            custom_st_write("الشارات المكتسبة:")
             for badge in user_data[user]['badges']:
                 custom_st_write(f"- {badge}")
         else:
@@ -558,7 +563,6 @@ def main():
     """
     st.markdown(css_style, unsafe_allow_html=True)
 
-    # Your existing Streamlit app layout
     handle_rating()
 
 if __name__ == "__main__":
