@@ -230,7 +230,7 @@ def find_synonyms(_model, input_word):
 @st.cache_data(ttl= None)
 def return_embedder():
     embedder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
-    reutrn embedder
+    return embedder
 def find_reverse_definition(_list_data, input_text):
     embedder = return_embedder()
     emb = embedder.encode(input_text)
