@@ -226,7 +226,7 @@ def find_synonyms(_model, input_word):
     except KeyError:
         return []
 
-embedder = SentenceTransformer("sentence-transformers/distiluse-base-multilingual-cased-v2")
+embedder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 # Function to find reverse definition using Sentence Transformers
 def find_reverse_definition(_list_data, input_text):
     emb = embedder.encode(input_text)
