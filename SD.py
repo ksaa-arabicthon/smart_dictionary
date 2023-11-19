@@ -150,9 +150,9 @@ st.cache_data
 def load_gensim_models():
     gensim_model1 = gensim.models.Word2Vec.load('full_uni_cbow_100_twitter/full_uni_cbow_100_twitter.mdl')
     #gensim_model2 = gensim.models.Word2Vec.load('full_uni_cbow_100_wiki/full_uni_cbow_100_wiki.mdl')
-    return gensim_model1 #gensim_model2
+    return gensim_model1 
 
-gensim_model1 #gensim_model2 = load_gensim_models()
+gensim_model1 = load_gensim_models()
 
 # Replace 'file_path' with the actual path to your 'sample_data.pickle' file
 file_path = 'data/sample_data.pickle'
@@ -227,12 +227,12 @@ def find_synonyms(_model, input_word):
         return []
         
 # Use st.cache_resource for loading the ML model ~ sentence-transformers/all-MiniLM-L6-v2
-st.cache_data(ttl=3600)
+@st.cache_data(ttl=3600)
 def load_model():
     return SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
 # Your existing find_reverse_definition function can remain as is
-st.cache_data(ttl=24*3600)
+@st.cache_data(ttl=3600)
 def find_reverse_definition(_list_data, input_text):
     model = load_model()
     emb = model.encode(input_text)
