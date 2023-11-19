@@ -226,16 +226,12 @@ def find_synonyms(_model, input_word):
     except KeyError:
         return []
         
-# Global variable to store the loaded model
-global embedder
-embedder = None
-
+# Use st.cache_resource for loading the ML model
+@st.cache_resource(ttl=3600)
 def load_model():
-    global embedder
-    if embedder is None:
-        embedder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
-    return embedder
+    return SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
+# Your existing find_reverse_definition function can remain as is
 @st.cache_resource(ttl=3600)
 def find_reverse_definition(_list_data, input_text):
     model = load_model()
@@ -358,7 +354,7 @@ def handle_rating():
     st.markdown('<div class="custom-label">اختر الخدمة</div>', unsafe_allow_html=True)
 
     # Radio buttons
-    feature_option = st.radio("", ["***المدلول العكسي***", "***المدلول المعجمي***", "***النظير الكلمي***", "***النظير العامي***", "***الأصيل الكلمي***", "***الدّارج الكلمي***"])
+    feature_option = st.radio("label hidden", ["***المدلول العكسي***", "***المدلول المعجمي***", "***النظير الكلمي***", "***النظير العامي***", "***الأصيل الكلمي***", "***الدّارج الكلمي***"], label_visibility = "hidden")
 
     # Rest of your Streamlit code
 
