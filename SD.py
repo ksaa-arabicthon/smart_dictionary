@@ -1,5 +1,6 @@
 import streamlit as st
 import joblib
+import requests
 import csv
 import difflib
 import gensim
@@ -11,7 +12,6 @@ from streamlit_text_rating.st_text_rater import st_text_rater
 from spellchecker import SpellChecker
 import os
 import base64
-import requests
 
 # Initialize session_state
 if 'response_generated' not in st.session_state:
@@ -46,8 +46,7 @@ def create_custom_spellchecker(word_list):
 def check_spelling(spellchecker, word):
     return spellchecker.correction(word)
 
-import streamlit as st
-import requests
+
 
 # Function to search API
 def search_api(query):
@@ -149,12 +148,10 @@ model_aammi, vectorizer_aammi = load_aammi_model()
 @st.cache_data(ttl=3600)
 def load_gensim_models():
     gensim_model1 = gensim.models.Word2Vec.load('full_uni_cbow_100_twitter/full_uni_cbow_100_twitter.mdl')
-    #gensim_model2 = gensim.models.Word2Vec.load('full_uni_cbow_100_wiki/full_uni_cbow_100_wiki.mdl')
     return gensim_model1 
 
 gensim_model1 = load_gensim_models()
 
-# Replace 'file_path' with the actual path to your 'sample_data.pickle' file
 file_path = 'data/sample_data.pickle'
 
 @st.cache_resource(ttl=3600)
@@ -239,7 +236,8 @@ def find_reverse_definition(_list_data, input_text):
     similarities = {word['word']: cosine_similarity(torch.tensor(emb), word["emb"], dim=0) for word in _list_data}
     best_match_word = max(similarities, key=similarities.get)
     return best_match_word
-    
+
+@st.cache_data(ttl=3600)
 # Function to update user score and badges
 def update_user(user, score_increase):
     if user in user_data:
@@ -251,6 +249,7 @@ def update_user(user, score_increase):
         user_data[user] = {"score": score_increase, "badges": []}
     write_user_data(user_data)
 
+@st.cache_data(ttl=3600)
 # Function to handle rating
 def rate_response(user, response, user_input, app_response):
     if user in user_data:
@@ -356,10 +355,7 @@ def handle_rating():
     # Radio buttons
     feature_option = st.radio("label hidden", ["***المدلول العكسي***", "***المدلول المعجمي***", "***النظير الكلمي***", "***النظير العامي***", "***الأصيل الكلمي***", "***الدّارج الكلمي***"], label_visibility = "hidden")
 
-    # Rest of your Streamlit code
-
     response_generated = False
-
     app_response = ""
     
     # CSS to style the button
