@@ -146,7 +146,7 @@ def load_aammi_model():
 model_aammi, vectorizer_aammi = load_aammi_model()
 
 # Load Word2Vec models for synonyms
-st.cache_data
+@st.cache_data(ttl=3600)
 def load_gensim_models():
     gensim_model1 = gensim.models.Word2Vec.load('full_uni_cbow_100_twitter/full_uni_cbow_100_twitter.mdl')
     #gensim_model2 = gensim.models.Word2Vec.load('full_uni_cbow_100_wiki/full_uni_cbow_100_wiki.mdl')
