@@ -313,7 +313,7 @@ def handle_rating():
 
 
     # Text input without the default label
-    input_text = st.text_input("", key="input_text")
+    input_text = st.text_input("label hidden", key="input_text" , label_visibility = "hidden")
 
     # CSS to center radio buttons
     radio_style = """
@@ -462,13 +462,13 @@ def handle_rating():
         st.markdown('<div class="markdown-label">للحصول على نقاط في برنامج إثراء المجمع يرجى التسجيل هنا</div>', unsafe_allow_html=True)
         # Custom label using markdown for each input
         st.markdown('<div class="markdown-label">أدخل اسمك:</div>', unsafe_allow_html=True)
-        user_name = st.text_input("", key="user_name")
+        user_name = st.text_input("label hiiden", key="user_name", label_visibility = "hidden")
 
         st.markdown('<div class="markdown-label">أدخل بريدك الإلكتروني:</div>', unsafe_allow_html=True)
-        user_email = st.text_input("", key="user_email")
+        user_email = st.text_input("label hidden", key="user_email" , label_visibility = "hidden")
 
         st.markdown('<div class="markdown-label">ملاحظات أخرى:</div>', unsafe_allow_html=True)
-        user_notes = st.text_input("", key="user_notes")
+        user_notes = st.text_input("label hidden", key="user_notes", label_visibility = "hidden")
 
         # Button to submit review
         if st.button("إرسال المراجعة"):
