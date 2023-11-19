@@ -272,7 +272,6 @@ custom_spellchecker = create_custom_spellchecker(arabic_words)
 
 # Streamlit app layout
 def handle_rating():
-    # CSS to customize text input
     text_input_style = """
     <style>
         /* Target the text input widget */
@@ -291,6 +290,15 @@ def handle_rating():
             color: #08707a; /* Label color */
             font-size: 30px; /* Font size for markdown label */
             font-family: 'Almarai', sans-serif; /* Custom Google Font */
+        }
+
+        /* Hide the label of text input widgets while keeping it accessible */
+        .stTextInput label {
+            visibility: hidden;  /* Hide the label */
+            position: absolute;  /* Remove it from the flow */
+            height: 1px;         /* Minimal height */
+            width: 1px;          /* Minimal width */
+            overflow: hidden;    /* Avoid taking space */
         }
     </style>
     """
