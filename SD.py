@@ -227,12 +227,12 @@ def find_synonyms(_model, input_word):
         return []
         
 # Use st.cache_resource for loading the ML model
-@st.cache_resource(ttl=3600)
+@st.cache_resource(ttl=None)
 def load_model():
     return SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 # Your existing find_reverse_definition function can remain as is
-@st.cache_resource(ttl=3600)
+@st.cache_resource(ttl=None)
 def find_reverse_definition(_list_data, input_text):
     model = load_model()
     emb = model.encode(input_text)
