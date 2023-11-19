@@ -220,7 +220,7 @@ def find_word_details(input_word, data):
         return None
 
 # Function to find synonyms using Word2Vec model
-@st.cache_data(ttl=24*3600)
+@st.cache_data(ttl=3600)
 def find_synonyms(_model, input_word):
     try:
         synonyms = _model.wv.most_similar(input_word, topn=20)
@@ -229,7 +229,7 @@ def find_synonyms(_model, input_word):
         return []
         
 # Use st.cache_resource for loading the ML model ~ sentence-transformers/all-MiniLM-L6-v2
-st.cache_data(ttl=24*3600)
+st.cache_data(ttl=3600)
 def load_model():
     return SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
