@@ -578,5 +578,7 @@ def main():
 
     handle_rating()
 
+    st.cache_data.clear()
+
 if __name__ == "__main__":
     main()
