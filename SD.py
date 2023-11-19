@@ -13,6 +13,8 @@ import os
 import base64
 import requests
 
+st.cache_data.clear()
+
 # Initialize session_state
 if 'response_generated' not in st.session_state:
     st.session_state.response_generated = False
@@ -577,8 +579,6 @@ def main():
     st.markdown(css_style, unsafe_allow_html=True)
 
     handle_rating()
-
-    st.cache_data.clear()
 
 if __name__ == "__main__":
     main()
