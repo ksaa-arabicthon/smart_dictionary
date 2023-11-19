@@ -7,3 +7,11 @@ streamlit-text-rating
 pyspellchecker
 requests
 scikit-learn==1.2.2
+huggingface-hub
+nltk
+numpy
+scipy
+sentencepiece
+torchvision
+tqdm
+transformers
