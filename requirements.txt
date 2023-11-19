@@ -6,3 +6,4 @@ torch
 streamlit-text-rating
 pyspellchecker
 requests
+scikit-learn==1.2.2
