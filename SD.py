@@ -226,11 +226,20 @@ def find_synonyms(_model, input_word):
     except KeyError:
         return []
         
-# Function to find reverse definition using Sentence Transformers
+# Global variable to store the loaded model
+global embedder
+embedder = None
+
+def load_model():
+    global embedder
+    if embedder is None:
+        embedder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    return embedder
+
 @st.cache_resource(ttl=3600)
 def find_reverse_definition(_list_data, input_text):
-    embedder = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
-    emb = embedder.encode(input_text)
+    model = load_model()
+    emb = model.encode(input_text)
     similarities = {word['word']: cosine_similarity(torch.tensor(emb), word["emb"], dim=0) for word in _list_data}
     best_match_word = max(similarities, key=similarities.get)
     return best_match_word
