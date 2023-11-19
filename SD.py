@@ -13,8 +13,6 @@ import os
 import base64
 import requests
 
-st.cache_data.clear()
-
 # Initialize session_state
 if 'response_generated' not in st.session_state:
     st.session_state.response_generated = False
@@ -151,10 +149,10 @@ model_aammi, vectorizer_aammi = load_aammi_model()
 st.cache_data
 def load_gensim_models():
     gensim_model1 = gensim.models.Word2Vec.load('full_uni_cbow_100_twitter/full_uni_cbow_100_twitter.mdl')
-    gensim_model2 = gensim.models.Word2Vec.load('full_uni_cbow_100_wiki/full_uni_cbow_100_wiki.mdl')
-    return gensim_model1, gensim_model2
+    #gensim_model2 = gensim.models.Word2Vec.load('full_uni_cbow_100_wiki/full_uni_cbow_100_wiki.mdl')
+    return gensim_model1 #gensim_model2
 
-gensim_model1, gensim_model2 = load_gensim_models()
+gensim_model1 #gensim_model2 = load_gensim_models()
 
 # Replace 'file_path' with the actual path to your 'sample_data.pickle' file
 file_path = 'data/sample_data.pickle'
@@ -420,7 +418,7 @@ def handle_rating():
                     custom_st_write("3لم يتم العثور على تعريف لهذه الكلمة أو النص")
 
         elif feature_option == "***النظير الكلمي***":
-            synonyms = find_synonyms(gensim_model2, input_text)
+            synonyms = find_synonyms(gensim_model1, input_text)
             custom_st_write(f"مرادفات فصيحة للكلمة أو النص '{input_text}':")
             for synonym in synonyms:
                 custom_st_write(synonym)
