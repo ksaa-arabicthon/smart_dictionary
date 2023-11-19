@@ -46,8 +46,6 @@ def create_custom_spellchecker(word_list):
 def check_spelling(spellchecker, word):
     return spellchecker.correction(word)
 
-
-
 # Function to search API
 def search_api(query):
     api_key = st.secrets["siwar_api"]["key"]  # Accessing the API key from secrets
