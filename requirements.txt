@@ -1,7 +1,7 @@
 streamlit
 joblib
 gensim
-sentence-transformers
+sentence-transformers==2.2.2
 torch
 streamlit-text-rating
 pyspellchecker
