@@ -12,7 +12,7 @@ from streamlit_text_rating.st_text_rater import st_text_rater
 from spellchecker import SpellChecker
 import os
 import base64
-
+import json 
 # Initialize session_state
 if 'response_generated' not in st.session_state:
     st.session_state.response_generated = False
@@ -23,6 +23,17 @@ def remove_diacritics(word):
     for diacritic in diacritics:
         word = word.replace(diacritic, '')
     return word
+
+with open('words.json', 'r', encoding='utf-8') as file:
+     data = json.load(file)
+
+def search_definitions(input_letters):
+    results = []
+    for key, value in data.items():
+        if input_letters in key:  
+            results.extend(value)
+
+    return results
 
 def load_arabic_wordlist(csv_file_path):
     words = []
@@ -351,7 +362,7 @@ def handle_rating():
     st.markdown('<div class="custom-label">اختر الخدمة</div>', unsafe_allow_html=True)
 
     # Radio buttons
-    feature_option = st.radio("label hidden", ["***المدلول العكسي***", "***المدلول المعجمي***", "***النظير الكلمي***", "***النظير العامي***", "***الأصيل الكلمي***", "***الدّارج الكلمي***"], label_visibility = "hidden")
+    feature_option = st.radio("", ["***المدلول العكسي***", "***المدلول المعجمي***", "***النظير الكلمي***", "***النظير العامي***", "***الأصيل الكلمي***", "***الدّارج الكلمي***", "***البحث بالقوافي***"])
 
     response_generated = False
     app_response = ""
@@ -448,6 +459,25 @@ def handle_rating():
         elif feature_option == "***المدلول العكسي***":
             best_match_word = find_reverse_definition(list_data, input_text)
             custom_st_write(f"أقرب كلمة بالتعريف العكس للنص المدخل: '{best_match_word}'")
+
+        elif feature_option == "***البحث بالقوافي***":
+            results = search_definitions(input_text)
+            if results:
+                st.write('الكلمات التي تنتهي بنفس القوافي:')
+                # Create DataFrame for better display
+                df = pd.DataFrame(results)
+                df.columns = ['الكلمة', 'التعريف']
+
+                # Remove the index column
+                df = df.reset_index(drop=True)
+
+                # Apply custom CSS to the table cells
+                styled_df = df.style.set_properties(**{'text-align': 'right'})
+                styled_df = styled_df.applymap(lambda x: 'font-weight: bold; color: green; font-size: 24px;', subset=['التعريف'])
+
+                st.dataframe(styled_df, 800, 400)
+            else:
+                st.write('لم يتم العثور على تعريفات للحروف المُدخلة')
 
         st.session_state['response_generated'] = True
         st.session_state['user_input'] = input_text
