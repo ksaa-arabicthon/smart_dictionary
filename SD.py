@@ -13,7 +13,8 @@ from spellchecker import SpellChecker
 import os
 import base64
 import json 
-import pandas as pd
+import pandas as pd 
+
 # Initialize session_state
 if 'response_generated' not in st.session_state:
     st.session_state.response_generated = False
