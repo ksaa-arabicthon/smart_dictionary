@@ -24,7 +24,7 @@ def remove_diacritics(word):
         word = word.replace(diacritic, '')
     return word
 
-with open('words.json', 'r', encoding='utf-8') as file:
+with open('data/words.json', 'r', encoding='utf-8') as file:
      data = json.load(file)
 
 def search_definitions(input_letters):
