@@ -14,6 +14,7 @@ import os
 import base64
 import json 
 import pandas as pd 
+import random 
 
 # Initialize session_state
 if 'response_generated' not in st.session_state:
@@ -26,16 +27,25 @@ def remove_diacritics(word):
         word = word.replace(diacritic, '')
     return word
 
-with open('data/words.json', 'r', encoding='utf-8') as file:
-     data = json.load(file)
+with open('data/letter.pickle', 'rb') as handle:
+    one_letter = pickle.load(handle)
+with open('data/two_letters.pickle', 'rb') as handle:
+    two_letters = pickle.load(handle)
 
-def search_definitions(input_letters):
-    results = []
-    for key, value in data.items():
-        if input_letters in key:  
-            results.extend(value)
+K_CONSTANT = 15
 
-    return results
+def get_from_one(letter):
+  return random.choices(one_letter[letter], k=K_CONSTANT)
+def get_from_two(twoLetters):
+  return random.choices(two_letters[twoLetters], k=K_CONSTANT)
+
+def get_qafiya(letters):
+  if len(letters) == 1:
+    return get_from_one(letters)
+  elif len(letters) == 2:
+    return get_from_two(letters)
+  else:
+    return None
 
 def load_arabic_wordlist(csv_file_path):
     words = []
@@ -463,23 +473,23 @@ def handle_rating():
             custom_st_write(f"أقرب كلمة بالتعريف العكس للنص المدخل: '{best_match_word}'")
 
         elif feature_option == "***البحث بالقوافي***":
-            results = search_definitions(input_text)
-            if results:
-                st.write('الكلمات التي تنتهي بنفس القوافي:')
-                # Create DataFrame for better display
-                df = pd.DataFrame(results)
-                df.columns = ['الكلمة', 'التعريف']
-
-                # Remove the index column
-                df = df.reset_index(drop=True)
-
-                # Apply custom CSS to the table cells
-                styled_df = df.style.set_properties(**{'text-align': 'right'})
-                styled_df = styled_df.applymap(lambda x: 'font-weight: bold; color: green; font-size: 24px;', subset=['التعريف'])
-
-                st.dataframe(styled_df, 800, 400)
-            else:
-                st.write('لم يتم العثور على تعريفات للحروف المُدخلة')
+                    results = get_qafiya(input_text)
+                    if results:
+                        st.write('الكلمات التي تنتهي بنفس القوافي:')
+                        # Create DataFrame for better display
+                        df = pd.DataFrame(results)
+                        df.columns = ['الكلمة']
+        
+                        # Remove the index column
+                        df = df.reset_index(drop=True)
+        
+                        # Apply custom CSS to the table cells
+                        styled_df = df.style.set_properties(**{'text-align': 'right'})
+                        styled_df = styled_df.applymap(lambda x: 'font-weight: bold; color: green; font-size: 24px;', subset=['الكلمة'])
+        
+                        st.dataframe(styled_df, 800, 400)
+                    else:
+                        custom_st_write('لم يتم العثور على تعريفات للحروف المُدخلة')
 
         st.session_state['response_generated'] = True
         st.session_state['user_input'] = input_text
