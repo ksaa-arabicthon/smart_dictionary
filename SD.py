@@ -475,7 +475,7 @@ def handle_rating():
         elif feature_option == "***البحث بالقوافي***":
                     results = get_qafiya(input_text)
                     if results:
-                        st.write('الكلمات التي تنتهي بنفس القوافي:')
+                        custom_st_write('الكلمات التي تنتهي بنفس القوافي')
                         # Create DataFrame for better display
                         df = pd.DataFrame(results)
                         df.columns = ['الكلمة']
