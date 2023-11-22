@@ -15,7 +15,7 @@ import base64
 import json 
 import pandas as pd 
 import random 
-
+import webbrowser
 # Initialize session_state
 if 'response_generated' not in st.session_state:
     st.session_state.response_generated = False
@@ -473,23 +473,21 @@ def handle_rating():
             custom_st_write(f"أقرب كلمة بالتعريف العكس للنص المدخل: '{best_match_word}'")
 
         elif feature_option == "***البحث بالقوافي***":
-                    results = get_qafiya(input_text)
-                    if results:
-                        custom_st_write('الكلمات التي تنتهي بنفس القوافي')
-                        # Create DataFrame for better display
-                        df = pd.DataFrame(results)
-                        df.columns = ['الكلمة']
+            results = get_qafiya(input_text)
+            if results:
+                custom_st_write('الكلمات التي تنتهي بنفس القوافي')
         
-                        # Remove the index column
-                        df = df.reset_index(drop=True)
+                # Create DataFrame for better display
+                df = pd.DataFrame(results, columns=['الكلمة'])
         
-                        # Apply custom CSS to the table cells
-                        styled_df = df.style.set_properties(**{'text-align': 'right'})
-                        styled_df = styled_df.applymap(lambda x: 'font-weight: bold; color: green; font-size: 24px;', subset=['الكلمة'])
+                # Apply custom CSS to the table cells
+                styled_df = df.style.set_properties(**{'text-align': 'right', 'font-size': '18px'})
+                styled_df = styled_df.applymap(lambda x: 'font-weight: bold; color: green;')
         
-                        st.dataframe(styled_df, 800, 400)
-                    else:
-                        custom_st_write('لم يتم العثور على تعريفات للحروف المُدخلة')
+                # Display DataFrame without index
+                st.dataframe(styled_df, use_container_width=True, hide_index=True)
+            else:
+                custom_st_write('لم يتم العثور على تعريفات للحروف المُدخلة')
 
         st.session_state['response_generated'] = True
         st.session_state['user_input'] = input_text
@@ -564,6 +562,12 @@ def main():
     st.markdown(sidebar_text_style, unsafe_allow_html=True)
     st.sidebar.markdown('''<div class="sidebar-markdown-label"> <p> مرحبا بكم في </p> </div>''', unsafe_allow_html=True)
     st.sidebar.markdown(f'<img src="{logo_image_base64}" width="300">', unsafe_allow_html=True)
+    st.sidebar.markdown('يجب استخدام البيانات المستخدمة في المعجم الذكي للتجربة')
+    # Button in the sidebar
+    if st.sidebar.button('البيانات'):
+        # URL to redirect to when the button is clicked
+        url = 'https://drive.google.com/file/d/1ho84kGR0b9fRMLwe8ITJ6kYS7F-mbmOC/view?usp=drive_link'
+        webbrowser.open_new_tab(url)
     st.sidebar.markdown('''
         <div class="sidebar-markdown-label">
             <p>يقدم المعجم الذكي المزايا التالية والتي تجيب على أسئلتكم باستخدام تقنيات و خوارزميات الذكاء الاصطناعي</p>
