@@ -567,7 +567,7 @@ def main():
     centered_button_html = f"""
         <div style="text-align: center;">
             <a href="{url}" target="_blank">
-                <button style="color: white; background-color: blue; border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">
+                <button style="color: white; background-color: green; border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">
                     البيانات
                 </button>
             </a>
