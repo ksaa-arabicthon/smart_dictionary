@@ -10,4 +10,4 @@ scikit-learn==1.2.2
 huggingface-hub
 nltk
 pandas
-pycopy-webbrowser
+webbrowser
