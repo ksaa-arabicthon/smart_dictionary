@@ -563,21 +563,18 @@ def main():
     st.sidebar.markdown('''<div class="sidebar-markdown-label"> <p> مرحبا بكم في </p> </div>''', unsafe_allow_html=True)
     st.sidebar.markdown(f'<img src="{logo_image_base64}" width="300">', unsafe_allow_html=True)
     st.sidebar.markdown('يجب استخدام البيانات المستخدمة في المعجم الذكي للتجربة')
-    # URL you want to link to
     url = 'https://drive.google.com/file/d/1ho84kGR0b9fRMLwe8ITJ6kYS7F-mbmOC/view?usp=drive_link'
-    
-    # HTML code to style the link as a button and center it
     centered_button_html = f"""
         <div style="text-align: center;">
             <a href="{url}" target="_blank">
-                <button style="color: white; background-color: green; border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">
+                <button style="color: white; background-color: blue; border: none; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">
                     البيانات
                 </button>
             </a>
         </div>
     """
-    # Display the button in Streamlit's sidebar
-    st.sidebar.markdown(button_html, unsafe_allow_html=True)
+    # Display the centered button in Streamlit's sidebar
+    st.sidebar.markdown(centered_button_html, unsafe_allow_html=True)
     st.sidebar.markdown('''
         <div class="sidebar-markdown-label">
             <p>يقدم المعجم الذكي المزايا التالية والتي تجيب على أسئلتكم باستخدام تقنيات و خوارزميات الذكاء الاصطناعي</p>
